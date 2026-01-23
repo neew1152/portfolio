@@ -98,7 +98,6 @@ header {
     background: conic-gradient(var(--neon-blue), var(--neon-pink), var(--neon-green), var(--neon-blue));
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
     z-index: 0;
-    /* Puts the ring behind the photo */
     animation: spin-physical 4s linear infinite;
 }
 
@@ -110,10 +109,8 @@ header {
     border: 3px solid var(--bg-color);
     position: relative;
     z-index: 1;
-    /* Keeps the photo ON TOP of the ring */
 }
 
-/* This rotates the ring physically, instead of changing colors digitally */
 @keyframes spin-physical {
     100% {
         transform: rotate(360deg);
@@ -197,20 +194,25 @@ header {
     box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
 }
 
-/* Previews */
-.cert-card img {
+/* --- UPDATED PREVIEWS SECTION FOR PDF CANVAS --- */
+/* We added 'canvas' here so PDF previews size correctly */
+.cert-card img, 
+.cert-card canvas {
     width: 100%;
     height: 180px;
     object-fit: cover;
+    object-position: top; /* Ensures the top of the PDF (Header) is visible */
     border-bottom: 1px solid #333;
     opacity: 0.8;
+    display: block;
 }
 
-.cert-card:hover img {
+.cert-card:hover img,
+.cert-card:hover canvas {
     opacity: 1;
 }
 
-/* PDF Specific Preview */
+/* PDF Fallback Icon (if script fails) */
 .pdf-preview {
     height: 180px;
     display: flex;
@@ -230,6 +232,17 @@ header {
 .pdf-preview span {
     font-size: 0.8rem;
     color: #fff;
+}
+
+/* Loading Spinner Text */
+.loading-spinner {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--neon-blue);
+    font-size: 0.8rem;
+    background: #000;
 }
 
 .card-content {
