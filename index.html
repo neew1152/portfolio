@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nopphakon Boonsong | Portfolio</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts for Cyberpunk look -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Background Grid Effect -->
     <div class="bg-grid"></div>
 
     <header>
@@ -27,12 +24,11 @@
     </header>
 
     <main>
-        <!-- Hero / Profile Section -->
         <section id="about" class="hero-section">
             <div class="profile-container">
                 <div class="glow-ring">
-                    <!-- REPLACE 'assets/profile.jpg' WITH YOUR ACTUAL IMAGE -->
-                    <img src="assets/profile.jpg" alt="Nopphakon Boonsong" class="profile-pic" onerror="this.src='https://via.placeholder.com/200/000000/00ffff?text=NB'">
+                    <!-- Make sure your profile pic is named profile.jpg and in the assets folder -->
+                    <img src="assets/profile.jpg" alt="Nopphakon Boonsong" class="profile-pic" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-user-astronaut fa-5x\'></i>'">
                 </div>
             </div>
             <div class="hero-text">
@@ -47,61 +43,19 @@
             </div>
         </section>
 
-        <!-- Certifications Section -->
         <section id="certs" class="cert-section">
             <h2 class="section-title">Verified <span class="neon-pink">Certificates</span></h2>
-            <p class="instruction">Click items to view full resolution PDF/PNG</p>
+            <p class="instruction">Loading data from repository...</p>
 
-            <div class="cert-grid">
-                
-                <!-- CERTIFICATE CARD 1 -->
-                <div class="cert-card">
-                    <div class="card-content">
-                        <!-- Replace href with your PDF file path -->
-                        <a href="assets/certs/cert1.pdf" target="_blank">
-                            <!-- Replace src with a screenshot of the cert -->
-                            <img src="assets/certs/cert1.png" alt="Certificate Preview" onerror="this.src='https://via.placeholder.com/300x200/111/00ffff?text=Certificate+Preview'">
-                        </a>
-                        <h3>Python Mastery</h3>
-                        <p>Issued by: Example Corp</p>
-                    </div>
-                </div>
-
-                <!-- CERTIFICATE CARD 2 -->
-                <div class="cert-card">
-                    <div class="card-content">
-                        <a href="assets/certs/cert2.pdf" target="_blank">
-                            <img src="assets/certs/cert2.png" alt="Certificate Preview" onerror="this.src='https://via.placeholder.com/300x200/111/ff00ff?text=Certificate+Preview'">
-                        </a>
-                        <h3>Web Security</h3>
-                        <p>Issued by: CyberSec Inc</p>
-                    </div>
-                </div>
-
-                <!-- CERTIFICATE CARD 3 -->
-                <div class="cert-card">
-                    <div class="card-content">
-                        <a href="assets/certs/cert3.png" target="_blank">
-                            <img src="assets/certs/cert3.png" alt="Certificate Preview" onerror="this.src='https://via.placeholder.com/300x200/111/39ff14?text=Certificate+Preview'">
-                        </a>
-                        <h3>Network Engineering</h3>
-                        <p>Issued by: Tech Giant</p>
-                    </div>
-                </div>
-
-            </div>
+            <!-- This Grid is empty. JavaScript will fill it automatically. -->
+            <div class="cert-grid" id="cert-grid"></div>
         </section>
 
-        <!-- Upload / Contact Section -->
         <section id="contact" class="upload-section">
             <div class="upload-box">
                 <h2><i class="fas fa-cloud-upload-alt"></i> File Submission</h2>
-                <p>GitHub Pages is a static host. Files cannot be uploaded here directly by visitors.</p>
                 <p>To submit new certifications to this portfolio, please email the documents directly.</p>
-                <a href="mailto:neew2166@gmail.com?subject=New Certificate Submission" class="neon-button">Send Documents via Email</a>
-                <br><br>
-                <p class="small-text">Or view the repository source:</p>
-                <a href="https://github.com/neew1152" class="link-text">Open GitHub Repo</a>
+                <a href="mailto:neew2166@gmail.com?subject=New Certificate Submission" class="neon-button">Send via Email</a>
             </div>
         </section>
     </main>
@@ -110,5 +64,6 @@
         <p>&copy; 2025 Nopphakon Boonsong. All systems operational.</p>
     </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>
