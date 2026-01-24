@@ -67,33 +67,59 @@ header {
     text-shadow: 0 0 8px var(--neon-pink);
 }
 
-/* Hero Section */
+/* --- HERO SECTION WITH AERO GLASS --- */
 .hero-section {
-    padding: 80px 20px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.glow-ring {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    margin-bottom: 20px;
+    padding: 100px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* This creates the neon ring independently BEHIND the image */
+/* The Aero Glass Container */
+.glass-panel {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 50px;
+    max-width: 1000px;
+    width: 100%;
+    
+    /* Aero Glass Effect */
+    background: rgba(255, 255, 255, 0.03); /* Faint white fill */
+    backdrop-filter: blur(15px); /* The Blur */
+    -webkit-backdrop-filter: blur(15px); /* Safari support */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+    border-top: 1px solid rgba(255, 255, 255, 0.3); /* Highlight top edge */
+    border-left: 1px solid rgba(255, 255, 255, 0.3); /* Highlight left edge */
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Depth shadow */
+}
+
+/* Left Side (Image) */
+.hero-left {
+    flex-shrink: 0; /* Prevents image from shrinking */
+}
+
+/* Right Side (Text) */
+.hero-right {
+    text-align: left; /* Align text to left */
+    flex-grow: 1;
+}
+
+/* Profile Image Handling (Kept your fix for distortion) */
+.glow-ring {
+    position: relative;
+    width: 180px; /* Slightly larger for the new layout */
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .glow-ring::before {
     content: '';
     position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
+    top: -5px; left: -5px; right: -5px; bottom: -5px;
     border-radius: 50%;
     background: conic-gradient(var(--neon-blue), var(--neon-pink), var(--neon-green), var(--neon-blue));
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
@@ -112,49 +138,76 @@ header {
 }
 
 @keyframes spin-physical {
-    100% {
-        transform: rotate(360deg);
-    }
+    100% { transform: rotate(360deg); }
 }
 
-.hero-text h1 {
+/* Text Styling */
+.hero-right h1 {
     font-family: var(--font-head);
-    font-size: 3rem;
-    margin-bottom: 10px;
+    font-size: 3.5rem;
+    margin-bottom: 5px;
+    line-height: 1.1;
 }
 
 .neon-text {
     color: var(--neon-pink);
-    text-shadow: 0 0 10px var(--neon-pink);
+    text-shadow: 0 0 15px var(--neon-pink);
 }
 
 .subtitle {
-    color: #aaaaaa;
-    margin-bottom: 30px;
+    color: #cccccc;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
 }
 
 .contact-info {
     display: flex;
     gap: 15px;
-    justify-content: center;
     flex-wrap: wrap;
-    margin-top: 20px;
+    justify-content: flex-start; /* Align buttons left */
 }
 
 .info-item {
     color: var(--neon-blue);
     text-decoration: none;
-    border: 1px solid var(--neon-blue);
-    padding: 8px 16px;
-    border-radius: 5px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 10px 20px;
+    border-radius: 8px; /* Softer corners */
     transition: 0.3s;
     background: rgba(0, 255, 255, 0.05);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .info-item:hover {
     background: var(--neon-blue);
-    color: var(--bg-color);
-    box-shadow: 0 0 15px var(--neon-blue);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-blue);
+    border-color: var(--neon-blue);
+}
+
+/* --- RESPONSIVE DESIGN (Mobile) --- */
+@media (max-width: 900px) {
+    .glass-panel {
+        flex-direction: column; /* Stack them vertically on phone */
+        text-align: center;
+        padding: 30px;
+    }
+    
+    .hero-right {
+        text-align: center;
+    }
+    
+    .contact-info {
+        justify-content: center;
+    }
+    
+    .hero-right h1 {
+        font-size: 2.5rem;
+    }
 }
 
 /* Certs */
