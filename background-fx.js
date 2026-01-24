@@ -4,35 +4,33 @@ const ctx = canvas.getContext('2d');
 let width, height;
 let orbs = [];
 
-// NEW: More Vibrant, Varied Colors (Cyberpunk Palette)
+// Cyber/Neon Palette
 const colors = [
     '#ff00ff', // Neon Magenta
     '#00ffff', // Bright Cyan
     '#0011ff', // Electric Blue
     '#7000ff', // Deep Purple
     '#ff0055', // Hot Pink
-    '#00ff99'  // Cyber Green (Accent)
+    '#00ff99'  // Cyber Green
 ];
 
 // Mouse State
 let mouse = { x: null, y: null };
 let isHovering = false;
 
-// Resize Handler
 function resize() {
-    // Canvas is now 120% of screen (defined in CSS), so we match that resolution
-    width = canvas.width = window.innerWidth * 1.2;
-    height = canvas.height = window.innerHeight * 1.2;
+    // Match the CSS overscan (140%)
+    width = canvas.width = window.innerWidth * 1.4;
+    height = canvas.height = window.innerHeight * 1.4;
 }
 
 window.addEventListener('resize', resize);
 resize();
 
-// Mouse Event Listeners
 window.addEventListener('mousemove', (e) => {
-    // Offset mouse coordinates because canvas is shifted -10% top/left
-    mouse.x = e.clientX + (window.innerWidth * 0.1);
-    mouse.y = e.clientY + (window.innerHeight * 0.1);
+    // Offset mouse coords to match the -20% top/left CSS positioning
+    mouse.x = e.clientX + (window.innerWidth * 0.2);
+    mouse.y = e.clientY + (window.innerHeight * 0.2);
     isHovering = true;
 });
 
@@ -42,7 +40,6 @@ window.addEventListener('mouseleave', () => {
     mouse.y = null;
 });
 
-// Orb Class
 class Orb {
     constructor() {
         this.init();
@@ -52,17 +49,15 @@ class Orb {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
         
-        // Idle wandering speed
-        this.vx = (Math.random() - 0.5) * 4; 
-        this.vy = (Math.random() - 0.5) * 4;
+        // Very slow idle drift
+        this.vx = (Math.random() - 0.5) * 1.5; 
+        this.vy = (Math.random() - 0.5) * 1.5;
         
-        // Size variation
-        this.radius = Math.random() * 180 + 80; 
+        // HUGE RADIUS = Soft Gradient Look
+        this.radius = Math.random() * 300 + 300; 
         
         this.color = colors[Math.floor(Math.random() * colors.length)];
-        
         this.angle = Math.random() * Math.PI * 2;
-        this.angleSpeed = 0.02;
     }
 
     update() {
@@ -70,74 +65,73 @@ class Orb {
         this.x += this.vx;
         this.y += this.vy;
 
-        // Bounce off edges (keep them inside the canvas)
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
+        // Soft bounce off edges
+        if (this.x < -200 || this.x > width + 200) this.vx *= -1;
+        if (this.y < -200 || this.y > height + 200) this.vy *= -1;
 
-        // Pulse Effect
-        this.angle += this.angleSpeed;
-        const pulse = Math.sin(this.angle) * 30;
-
-        // 2. Mouse Attraction (The "Faster" Logic)
+        // 2. Mouse Attraction (Slow & Smooth)
         if (isHovering && mouse.x != null) {
             const dx = mouse.x - this.x;
             const dy = mouse.y - this.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            // Detection range increased to 800px
-            if (distance < 800) {
+            // Large detection range for smooth gradient shifting
+            if (distance < 1000) {
                 const forceDirectionX = dx / distance;
                 const forceDirectionY = dy / distance;
+                const force = (1000 - distance) / 1000; 
                 
-                // Stronger force calculation
-                const force = (800 - distance) / 800; 
-                
-                // INCREASED SPEED: Changed 0.05 to 0.45 for rapid snapping
-                const pullStrength = 0.45 * force; 
+                // LOW pull strength for "Floating/Wavy" feel
+                const pullStrength = 0.02 * force; 
 
-                this.vx += forceDirectionX * pullStrength * 50; // *50 adds "Burst" speed
-                this.vy += forceDirectionY * pullStrength * 50;
+                this.vx += forceDirectionX * pullStrength;
+                this.vy += forceDirectionY * pullStrength;
             }
         }
 
-        // Friction: Determines how fast they slow down.
-        // 0.90 = stops fast (snappy). 0.99 = slides like ice.
-        this.vx *= 0.92; 
-        this.vy *= 0.92;
+        // Low friction = maintains momentum like a fluid
+        this.vx *= 0.98; 
+        this.vy *= 0.98;
 
-        // Minimum movement check (prevents them from stopping completely)
-        if (!isHovering) {
-            if (Math.abs(this.vx) < 1) this.vx *= 1.05;
-            if (Math.abs(this.vy) < 1) this.vy *= 1.05;
-        }
-
-        this.draw(pulse);
+        this.draw();
     }
 
-    draw(pulse) {
+    draw() {
         ctx.beginPath();
-        // Gradient for soft edges
+        // Gradient from color to transparent
         const g = ctx.createRadialGradient(
             this.x, this.y, 0, 
-            this.x, this.y, this.radius + pulse
+            this.x, this.y, this.radius
         );
-        // High opacity center for vibrant colors
-        g.addColorStop(0, this.color);
-        g.addColorStop(0.6, this.color); 
+        // Lower opacity (0.4) for better blending/layering
+        g.addColorStop(0, this.hexToRgbA(this.color, 0.4));
         g.addColorStop(1, 'rgba(0,0,0,0)');
 
         ctx.fillStyle = g;
-        ctx.arc(this.x, this.y, this.radius + pulse, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.closePath();
     }
+
+    // Helper to convert Hex to RGBA for opacity control
+    hexToRgbA(hex, alpha){
+        var c;
+        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+            c= hex.substring(1).split('');
+            if(c.length== 3){
+                c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c= '0x'+c.join('');
+            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+alpha+')';
+        }
+        return hex; // fallback
+    }
 }
 
-// Initialization
 function initOrbs() {
     orbs = [];
-    // Increase count for more color density
-    const orbCount = window.innerWidth < 768 ? 8 : 15;
+    // Fewer orbs because they are huge now
+    const orbCount = window.innerWidth < 768 ? 6 : 10;
     for (let i = 0; i < orbCount; i++) {
         orbs.push(new Orb());
     }
@@ -145,11 +139,10 @@ function initOrbs() {
 
 initOrbs();
 
-// Animation Loop
 function animate() {
     ctx.clearRect(0, 0, width, height);
     
-    // "hard-light" or "screen" makes colors blend intensely
+    // "screen" or "lighten" blends the colors smoothly
     ctx.globalCompositeOperation = 'screen'; 
 
     orbs.forEach(orb => orb.update());

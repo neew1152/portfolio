@@ -1,5 +1,5 @@
 body {
-    background-color: #000000; /* Ensure base is black */
+    background-color: #000000; /* Fixes white edge behind canvas */
     color: var(--text-color);
     font-family: var(--font-body);
     overflow-x: hidden;
@@ -7,31 +7,31 @@ body {
     padding: 0;
 }
 
-/* --- FLUID CANVAS UPDATES --- */
+/* --- LAYER 1: FLUID COLORS (Bottom) --- */
 #fluid-canvas {
     position: fixed;
-    /* Make canvas larger than viewport to hide blurred edges */
-    top: -10%;
-    left: -10%;
-    width: 120%;
-    height: 120%;
-    z-index: -2;
-    /* Heavy blur to blend the colors */
-    filter: blur(60px) contrast(1.4); 
+    /* Oversize the canvas to hide blurred edges off-screen */
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    z-index: -2; 
+    /* Max blur to turn orbs into a giant gradient wash */
+    filter: blur(100px) contrast(1.1); 
     background: #000000;
 }
 
-/* Optional Grid Texture on top of the fluid */
-.texture-overlay {
+/* --- LAYER 2: GRID (Middle) --- */
+.bg-grid {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1;
+    /* The original grid lines */
     background: 
-        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
-    opacity: 0.5;
-    pointer-events: none;
+    z-index: -1; /* Above canvas, behind text */
+    pointer-events: none; /* Let mouse pass through to canvas */
 }
 
 /* --- HEADER --- */
