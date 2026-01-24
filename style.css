@@ -1,0 +1,366 @@
+/* ... Previous Variables ... */
+:root {
+    --bg-color: #050505;
+    --tech-blue: #00f3ff;
+    --tech-white: #ffffff;
+    --tech-teal: #008f96;
+    --text-color: #ffffff;
+    --font-head: 'Orbitron', sans-serif;
+    --font-body: 'Roboto Mono', monospace;
+    
+    /* Glass Variables */
+    --glass-bg: linear-gradient(145deg, rgba(30, 35, 40, 0.7) 0%, rgba(10, 15, 20, 0.5) 100%);
+    --glass-border: rgba(0, 243, 255, 0.15);
+    --glass-blur: blur(20px) saturate(140%);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), 
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.03); 
+}
+
+/* --- NEW BACKGROUND CANVAS STYLES --- */
+#fluid-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    /* This creates the "Cloudy/Wavy" look by blurring the circles drawn in JS */
+    filter: blur(80px) contrast(1.2); 
+    background: #020205; /* Deep black base */
+}
+
+/* Optional Grid Texture on top of the fluid */
+.texture-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background: 
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* --- HEADER --- */
+.glass-header {
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(5, 8, 10, 0.85);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.logo {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    color: var(--tech-white);
+    letter-spacing: 2px;
+}
+
+.logo .dot {
+    color: var(--tech-blue);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: #aaa;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: 0.3s;
+    letter-spacing: 1px;
+}
+
+.nav-links a:hover {
+    color: var(--tech-blue);
+    background: rgba(0, 243, 255, 0.05);
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
+    padding: 120px 20px 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glass-panel.gnome-style {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 60px;
+    max-width: 1100px;
+    width: 100%;
+    
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 4px; /* Sharper corners for a "manlier/tech" feel */
+}
+
+/* PROFILE RING - CHANGED TO MONOCHROME */
+.glow-ring {
+    position: relative;
+    width: 180px; height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glow-ring::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    /* No Rainbows. Just Blue -> Transparent -> White -> Transparent */
+    background: conic-gradient(var(--tech-blue), transparent, var(--tech-white), transparent, var(--tech-blue));
+    animation: spin 8s linear infinite;
+    filter: blur(5px);
+}
+
+.profile-pic {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+    z-index: 2;
+    border: 3px solid #111;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.hero-right h1 {
+    font-family: var(--font-head);
+    font-size: 3rem;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.accent-text {
+    color: var(--tech-blue);
+    text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+
+.subtitle {
+    color: #888;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+/* CONTACT BUTTONS */
+.contact-info {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.info-item {
+    color: #ddd;
+    text-decoration: none;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: 0.3s;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+}
+
+.info-item i {
+    color: var(--tech-blue);
+}
+
+.info-item:hover {
+    background: rgba(0, 243, 255, 0.1);
+    border-color: var(--tech-blue);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+    .glass-panel.gnome-style {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px;
+    }
+    .contact-info {
+        justify-content: center;
+    }
+}
+
+/* --- CERT SECTION --- */
+.cert-section {
+    padding: 50px 10%;
+}
+
+.section-title {
+    font-family: var(--font-head);
+    margin-bottom: 30px;
+    border-left: 4px solid var(--tech-blue);
+    padding-left: 20px;
+    font-size: 2rem;
+}
+
+.instruction {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* CARD DESIGN */
+.cert-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    
+    border-radius: 6px; /* Sharper corners */
+    overflow: hidden;
+    transition: 0.3s ease;
+    
+    /* Layout Logic for Text Overflow */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.cert-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--tech-blue); /* Highlights blue on hover */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+.preview-container {
+    height: 180px;
+    width: 100%;
+    overflow: hidden;
+    background: #000;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+}
+
+.cert-card img, 
+.cert-card canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    opacity: 0.8;
+    transition: 0.3s;
+    display: block;
+}
+
+.cert-card:hover img,
+.cert-card:hover canvas {
+    opacity: 1;
+}
+
+.pdf-preview, .loading-spinner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+.card-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content h3 {
+    color: #eee;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    font-weight: 500;
+    line-height: 1.6;
+    
+    /* OVERFLOW FIX */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.file-type {
+    font-size: 0.7rem;
+    color: var(--tech-blue);
+    font-weight: bold;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    margin-top: auto;
+}
+
+/* --- UPLOAD SECTION --- */
+.upload-section {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.upload-box.gnome-style {
+    display: inline-block;
+    padding: 50px;
+    border-radius: 8px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+}
+
+.neon-button {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid var(--tech-blue);
+    color: var(--tech-blue);
+    text-decoration: none;
+    font-weight: bold;
+    font-family: var(--font-head);
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.neon-button:hover {
+    background: rgba(0, 243, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+    color: #fff;
+}
+
+.glass-footer {
+    text-align: center;
+    padding: 30px;
+    background: rgba(5, 5, 5, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #555;
+    font-size: 0.8rem;
+}
