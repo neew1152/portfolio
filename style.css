@@ -74,11 +74,10 @@ body {
 }
 
 /* --- THE PROFILE FRAME --- */
-/* A structural container for the image */
 .profile-frame {
     padding: 10px;
     border: 1px solid rgba(0, 243, 255, 0.3);
-    border-radius: 50%; /* Keep circular frame */
+    border-radius: 50%;
     background: rgba(0,0,0,0.3);
     box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
 }
@@ -90,30 +89,52 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    overflow: hidden; /* Ensures image stays in circle */
 }
 
-/* The spinning border inside the frame */
+/* THE RANDOM COLOR WAVE */
 .glow-ring::before {
     content: '';
     position: absolute;
-    inset: -2px;
+    /* Negative inset creates the thickness of the wave behind the image */
+    inset: -6px; 
     border-radius: 50%;
-    background: conic-gradient(var(--tech-blue), transparent, var(--tech-white), transparent, var(--tech-blue));
-    animation: spin 8s linear infinite;
-    filter: blur(5px);
+    
+    /* A rich gradient that simulates the wave spectrum */
+    background: conic-gradient(
+        from 0deg,
+        #ff0000, #ff00ff, #0000ff,
+        #00ffff, #00ff00, #ffff00, #ff0000
+    );
+    
+    /* Blur blends the colors into a "wave" */
+    filter: blur(12px);
+    
+    /* Two animations: 
+       1. spin: Rotates the gradient
+       2. colorWave: Shifts the hues so colors are always changing randomly 
+    */
+    animation: spin 3s linear infinite, colorWave 6s ease-in-out infinite alternate;
 }
 
 .profile-pic {
-    width: 100%; height: 100%;
+    width: 100%; 
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
     position: relative;
     z-index: 2;
-    border: 4px solid #111; /* Inner matte border */
+    border: none;
 }
 
-@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes spin { 
+    100% { transform: rotate(360deg); } 
+}
+
+/* This creates the random shifting color effect */
+@keyframes colorWave {
+    0% { filter: blur(12px) hue-rotate(0deg); }
+    100% { filter: blur(12px) hue-rotate(360deg); }
+}
 
 /* --- TEXT CONTENT --- */
 .hero-right h1 {
