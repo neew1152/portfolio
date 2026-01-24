@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch('certs.json')
         .then(response => response.json())
         .then(files => {
-            instruction.textContent = `${files.length} Certificates found. Click to view full resolution.`;
+            instruction.textContent = `${files.length} Certificates found.`;
             
             files.forEach((filename, index) => {
                 // 1. Clean up the name for display
