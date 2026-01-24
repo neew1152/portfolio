@@ -1,32 +1,24 @@
-/* ... Previous Variables ... */
-:root {
-    --bg-color: #050505;
-    --tech-blue: #00f3ff;
-    --tech-white: #ffffff;
-    --tech-teal: #008f96;
-    --text-color: #ffffff;
-    --font-head: 'Orbitron', sans-serif;
-    --font-body: 'Roboto Mono', monospace;
-    
-    /* Glass Variables */
-    --glass-bg: linear-gradient(145deg, rgba(30, 35, 40, 0.7) 0%, rgba(10, 15, 20, 0.5) 100%);
-    --glass-border: rgba(0, 243, 255, 0.15);
-    --glass-blur: blur(20px) saturate(140%);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), 
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.03); 
+body {
+    background-color: #000000; /* Ensure base is black */
+    color: var(--text-color);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 }
 
-/* --- NEW BACKGROUND CANVAS STYLES --- */
+/* --- FLUID CANVAS UPDATES --- */
 #fluid-canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    /* Make canvas larger than viewport to hide blurred edges */
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
     z-index: -2;
-    /* This creates the "Cloudy/Wavy" look by blurring the circles drawn in JS */
-    filter: blur(80px) contrast(1.2); 
-    background: #020205; /* Deep black base */
+    /* Heavy blur to blend the colors */
+    filter: blur(60px) contrast(1.4); 
+    background: #000000;
 }
 
 /* Optional Grid Texture on top of the fluid */

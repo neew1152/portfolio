@@ -4,13 +4,14 @@ const ctx = canvas.getContext('2d');
 let width, height;
 let orbs = [];
 
-// Cyber Blue Palette (Dark to Light)
+// NEW: More Vibrant, Varied Colors (Cyberpunk Palette)
 const colors = [
-    '#001133', // Deep Blue
-    '#003366', // Mid Blue
-    '#005f73', // Teal Dark
-    '#0a9396', // Teal Light
-    '#001524'  // Almost Black Blue
+    '#ff00ff', // Neon Magenta
+    '#00ffff', // Bright Cyan
+    '#0011ff', // Electric Blue
+    '#7000ff', // Deep Purple
+    '#ff0055', // Hot Pink
+    '#00ff99'  // Cyber Green (Accent)
 ];
 
 // Mouse State
@@ -19,8 +20,9 @@ let isHovering = false;
 
 // Resize Handler
 function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+    // Canvas is now 120% of screen (defined in CSS), so we match that resolution
+    width = canvas.width = window.innerWidth * 1.2;
+    height = canvas.height = window.innerHeight * 1.2;
 }
 
 window.addEventListener('resize', resize);
@@ -28,8 +30,9 @@ resize();
 
 // Mouse Event Listeners
 window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
+    // Offset mouse coordinates because canvas is shifted -10% top/left
+    mouse.x = e.clientX + (window.innerWidth * 0.1);
+    mouse.y = e.clientY + (window.innerHeight * 0.1);
     isHovering = true;
 });
 
@@ -46,65 +49,66 @@ class Orb {
     }
 
     init() {
-        // Random position
         this.x = Math.random() * width;
         this.y = Math.random() * height;
         
-        // Base Velocity for "Wavy" continuous movement
-        this.vx = (Math.random() - 0.5) * 2; // Speed between -1 and 1
-        this.vy = (Math.random() - 0.5) * 2;
+        // Idle wandering speed
+        this.vx = (Math.random() - 0.5) * 4; 
+        this.vy = (Math.random() - 0.5) * 4;
         
-        // Appearance
-        this.radius = Math.random() * 150 + 100; // Large blobs
+        // Size variation
+        this.radius = Math.random() * 180 + 80; 
+        
         this.color = colors[Math.floor(Math.random() * colors.length)];
         
-        // Sine wave offset for pulsing
         this.angle = Math.random() * Math.PI * 2;
         this.angleSpeed = 0.02;
     }
 
     update() {
-        // 1. Continuous Wavy Movement (Idle State)
+        // 1. Idle Movement
         this.x += this.vx;
         this.y += this.vy;
 
-        // Bounce off edges
-        if (this.x < -100 || this.x > width + 100) this.vx *= -1;
-        if (this.y < -100 || this.y > height + 100) this.vy *= -1;
+        // Bounce off edges (keep them inside the canvas)
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
 
-        // Pulse size slightly for "breathing" effect
+        // Pulse Effect
         this.angle += this.angleSpeed;
-        const pulse = Math.sin(this.angle) * 20;
+        const pulse = Math.sin(this.angle) * 30;
 
-        // 2. Mouse Attraction (Hover State)
+        // 2. Mouse Attraction (The "Faster" Logic)
         if (isHovering && mouse.x != null) {
             const dx = mouse.x - this.x;
             const dy = mouse.y - this.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            // If mouse is somewhat close (within 600px)
-            if (distance < 600) {
-                // Calculate force - closer = stronger pull
+            // Detection range increased to 800px
+            if (distance < 800) {
                 const forceDirectionX = dx / distance;
                 const forceDirectionY = dy / distance;
-                const force = (600 - distance) / 600; 
                 
-                // Gentler pull factor (0.05) so it feels fluid, not jerky
-                const pullStrength = 0.05 * force; 
+                // Stronger force calculation
+                const force = (800 - distance) / 800; 
+                
+                // INCREASED SPEED: Changed 0.05 to 0.45 for rapid snapping
+                const pullStrength = 0.45 * force; 
 
-                this.vx += forceDirectionX * pullStrength;
-                this.vy += forceDirectionY * pullStrength;
+                this.vx += forceDirectionX * pullStrength * 50; // *50 adds "Burst" speed
+                this.vy += forceDirectionY * pullStrength * 50;
             }
         }
 
-        // Apply friction to prevent them from getting too fast
-        this.vx *= 0.98;
-        this.vy *= 0.98;
+        // Friction: Determines how fast they slow down.
+        // 0.90 = stops fast (snappy). 0.99 = slides like ice.
+        this.vx *= 0.92; 
+        this.vy *= 0.92;
 
-        // Keep a minimum movement speed so it never freezes
+        // Minimum movement check (prevents them from stopping completely)
         if (!isHovering) {
-            if (Math.abs(this.vx) < 0.5) this.vx *= 1.05;
-            if (Math.abs(this.vy) < 0.5) this.vy *= 1.05;
+            if (Math.abs(this.vx) < 1) this.vx *= 1.05;
+            if (Math.abs(this.vy) < 1) this.vy *= 1.05;
         }
 
         this.draw(pulse);
@@ -112,27 +116,28 @@ class Orb {
 
     draw(pulse) {
         ctx.beginPath();
-        // Create gradient for soft orb look
+        // Gradient for soft edges
         const g = ctx.createRadialGradient(
             this.x, this.y, 0, 
             this.x, this.y, this.radius + pulse
         );
+        // High opacity center for vibrant colors
         g.addColorStop(0, this.color);
-        g.addColorStop(1, 'rgba(0,0,0,0)'); // Fade to transparent
+        g.addColorStop(0.6, this.color); 
+        g.addColorStop(1, 'rgba(0,0,0,0)');
 
         ctx.fillStyle = g;
-        // Draw slightly larger than radius to account for gradient fade
         ctx.arc(this.x, this.y, this.radius + pulse, 0, Math.PI * 2);
         ctx.fill();
         ctx.closePath();
     }
 }
 
-// Create Orbs
+// Initialization
 function initOrbs() {
     orbs = [];
-    // Number of orbs based on screen size (prevent overcrowding on mobile)
-    const orbCount = window.innerWidth < 768 ? 5 : 12;
+    // Increase count for more color density
+    const orbCount = window.innerWidth < 768 ? 8 : 15;
     for (let i = 0; i < orbCount; i++) {
         orbs.push(new Orb());
     }
@@ -140,16 +145,14 @@ function initOrbs() {
 
 initOrbs();
 
-// Main Animation Loop
+// Animation Loop
 function animate() {
-    // Clear canvas with a slight trail effect (optional, or just clearRect)
     ctx.clearRect(0, 0, width, height);
     
-    // Use "screen" blend mode for glowing effect
-    ctx.globalCompositeOperation = 'screen';
+    // "hard-light" or "screen" makes colors blend intensely
+    ctx.globalCompositeOperation = 'screen'; 
 
     orbs.forEach(orb => orb.update());
-
     requestAnimationFrame(animate);
 }
 
